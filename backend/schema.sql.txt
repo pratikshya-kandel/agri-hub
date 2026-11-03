@@ -1,0 +1,49 @@
+-- AgriMarkt / KisanLink schema
+-- Run this in pgAdmin Query Tool on database: agri_marketplace
+
+CREATE TABLE IF NOT EXISTS users (
+  id SERIAL PRIMARY KEY,
+  full_name VARCHAR(150) NOT NULL,
+  email VARCHAR(150) UNIQUE NOT NULL,
+  password_hash TEXT NOT NULL,
+  role VARCHAR(30) NOT NULL,
+  created_at TIMESTAMP DEFAULT NOW()
+);
+
+CREATE TABLE IF NOT EXISTS farmers (
+  farmer_id SERIAL PRIMARY KEY,
+  full_name VARCHAR(150) NOT NULL,
+  email VARCHAR(150) UNIQUE NOT NULL,
+  password TEXT,
+  phone_number VARCHAR(20),
+  gender VARCHAR(20),
+  date_of_birth DATE,
+  citizenship_number VARCHAR(50),
+  province VARCHAR(80),
+  district VARCHAR(80),
+  municipality VARCHAR(80),
+  ward_no INTEGER
+);
+
+CREATE TABLE IF NOT EXISTS product_categories (
+  category_id SERIAL PRIMARY KEY,
+  category_name VARCHAR(100) UNIQUE NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS products (
+  product_id SERIAL PRIMARY KEY,
+  farmer_id INTEGER REFERENCES farmers(farmer_id),
+  category_id INTEGER REFERENCES product_categories(category_id),
+  product_name VARCHAR(150) NOT NULL,
+  description TEXT,
+  image TEXT,
+  price_per_kg NUMERIC(10,2) NOT NULL,
+  available_quantity NUMERIC(10,2) DEFAULT 0,
+  minimum_order NUMERIC(10,2) DEFAULT 1,
+  unit VARCHAR(20) DEFAULT 'kg',
+  organic BOOLEAN DEFAULT FALSE,
+  harvest_date DATE,
+  expiry_date DATE,
+  status VARCHAR(30) DEFAULT 'available',
+  created_at TIMESTAMP DEFAULT NOW()
+);
